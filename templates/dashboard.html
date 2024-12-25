@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(255, 255, 255, 0.2)); /* Black 80% to White 20% */
+            color: #fff; /* Set text color to white */
+            font-family: Arial, sans-serif; /* Set font family */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .logo {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+        .logo img {
+            width: 50px; /* Adjust the width as needed */
+            height: auto;
+            vertical-align: middle;
+            margin-right: 10px; /* Add some spacing between logo and text */
+        }
+        .upload-form {
+            margin-top: 50px;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        .upload-form h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input[type="text"], input[type="file"] {
+            margin-bottom: 20px;
+            padding: 10px;
+            width: 300px;
+            border: none;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.3);
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+        }
+        input[type="file"] {
+            cursor: pointer;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .logout-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #f44336; /* Red color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .logout-button:hover {
+            background-color: #d32f2f; /* Darker red color on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <img src="{{ url_for('static', filename='logos/logo.png') }}" alt="Logo">
+        {{ site_name }}
+    </div>
+
+    <div class="upload-form">
+        <h1>Upload Video</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="text" name="title" placeholder="Video Title" required>
+            <input type="file" name="video" accept="video/mp4" required>
+            <label for="video">Choose Video</label>
+            <input type="file" name="thumbnail" accept="image/jpeg, image/png" required>
+            <label for="thumbnail">Choose Thumbnail</label>
+            <input type="submit" value="Upload">
+        </form>
+    </div>
+
+    <!-- Logout button -->
+    <form action="{{ url_for('logout') }}" method="post">
+        <input class="logout-button" type="submit" value="Logout">
+    </form>
+
+    <script>
+        // Update the webpage title dynamically
+        document.title = document.querySelector('.logo').textContent.trim() + ' Dashboard';
+    </script>
+</body>
+</html>

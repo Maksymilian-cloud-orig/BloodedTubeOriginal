@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch Video</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #181818; /* Dark gray background */
+            color: #fff;
+        }
+
+        header {
+            background-color: #202020; /* Slightly lighter dark gray for header */
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        header img {
+            height: 40px;
+        }
+
+        .main-content {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #202020; /* Dark gray sidebar */
+            padding: 20px;
+            box-sizing: border-box;
+            height: calc(100vh - 60px); /* Full height minus header */
+            position: sticky;
+            top: 60px; /* Adjusted to push below the header */
+            overflow-y: auto; /* Enable scrolling */
+        }
+
+        .video-section {
+            flex: 1;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        video {
+            width: 100%;
+            display: block;
+            background-color: #000; /* Black background for video */
+        }
+
+        .title-overlay {
+            width: 100%;
+            padding: 10px 0;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: left;
+            color: #fff; /* White text color */
+        }
+
+        .video-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-item {
+            margin-bottom: 15px;
+        }
+
+        .video-item a {
+            text-decoration: none;
+            color: #fff;
+            display: flex;
+            align-items: center;
+        }
+
+        .video-item img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .video-item p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .search-bar form {
+            display: flex;
+        }
+
+        .search-bar input[type="text"] {
+            padding: 5px;
+            width: 200px;
+            background-color: #303030; /* Dark background for the input */
+            border: 1px solid #505050; /* Border color to match the theme */
+            color: #fff; /* Text color */
+        }
+
+        .search-bar input[type="text"]::placeholder {
+            color: #aaa; /* Placeholder text color */
+        }
+
+        .search-bar input[type="submit"] {
+            padding: 5px 10px;
+            background-color: #505050; /* Button background color */
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .search-bar input[type="submit"]:hover {
+            background-color: #606060; /* Button hover color */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logos/logo.png') }}" alt="Logo">
+        </div>
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <form action="/search" method="GET">
+                <input type="text" name="query" placeholder="Search videos...">
+                <input type="submit" value="Search">
+            </form>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <aside class="sidebar">
+            <!-- Video List -->
+            <div class="video-list">
+                {% if videos %}
+                    {% for video, info in videos.items() %}
+                        <div class="video-item">
+                            <a href="/watch/{{ video }}">
+                                <img src="{{ url_for('static', filename='thumbnails/' + video + '.jpg') }}" alt="{{ info['title'] }}" onerror="this.onerror=null; this.src='{{ url_for('static', filename='thumbnails/' + video + '.png') }}';">
+                                <p>{{ info['title']|truncate(15, '...') }}</p>
+                            </a>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>Nothing found.</p>
+                {% endif %}
+            </div>
+        </aside>
+
+        <section class="video-section">
+            <div class="video-container">
+                <video controls>
+                    <source src="/watch/{{ video_id }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="title-overlay">{{ video_title }}</div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
